@@ -7,11 +7,6 @@ const {isValid, emptyBody, idMatch, profileImageCheck} = require("../validations
 
 
 
-
-
-
-
-
 //====================================  Creating a post  ===========================================//
 
 const createPost = async function (req, res){
@@ -19,7 +14,7 @@ const createPost = async function (req, res){
         let data = req.body
         if(!emptyBody(data)) return res.status(400).send({status: false, message: "Please provide details in the body!"})
 
-        let {profileId, caption, location} = data
+        let {profileId, caption, location,hashTags} = data
         let files = req.files
         
         if(!profileId) return res.status(400).send({status: false, message: "ProfileId is mandatory!"})
@@ -55,6 +50,7 @@ const createPost = async function (req, res){
         obj["Image"] = newPost["image"]
         obj["Caption"] = newPost["caption"]
         obj["Likes"] = newPost["likesCount"]
+        obj["hashTags"] = newPost["hashTags"]
         obj["Comments"] = newPost["commentsCount"]
         postData.push(obj)
 
@@ -67,11 +63,6 @@ const createPost = async function (req, res){
         return res.status(500).send({status: false, message: error.message})
     }
 }
-
-
-
-
-
 
 
 
@@ -133,12 +124,6 @@ const getPost = async function (req,res){
 
 
 
-
-
-
-
-
-
 //===================================  Fetching comments' list of a post  ====================================//
 
 const getCommentsList = async function (req,res){
@@ -184,13 +169,6 @@ const getCommentsList = async function (req,res){
 
 
 
-
-
-
-
-
-
-
 //=======================================  Fetching Like's list of a post   =========================================//
 
 const getLikesList = async function (req,res){
@@ -228,14 +206,6 @@ const getLikesList = async function (req,res){
         res.status(500).send({status: false, message: error.message})
     }
 }
-
-
-
-
-
-
-
-
 
 
 
@@ -291,13 +261,6 @@ const updatePost = async function (req, res){
 
 
 
-
-
-
-
-
-
-
 //========================================  Deleting a post  =====================================//
 
 const deletePost = async function (req, res){
@@ -326,10 +289,17 @@ const deletePost = async function (req, res){
     }
 }
 
+//========================================  search postwith hash tags  =====================================//
 
-
-
-
+exports.searchByHashtag = async (req, res) => {
+    try {
+        const hashTags = req.params.hashTags;
+        const posts = await postModel.find({ hashTags: hashTags });
+        return res.status(200).res.send({status:true,msg:posts});
+    } catch (error) {
+        return res.status(500).send({status: false, message: error.message})
+    }
+};
 
 
 

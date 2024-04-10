@@ -74,6 +74,11 @@ const profileSchema = new mongoose.Schema({
         type : Array,
         default : []
     },
+    role: {
+        type: String,
+        enum: ['user', 'admin'],
+        default: 'user' 
+    },
     isDeleted : {
         type : Boolean,
         default : false

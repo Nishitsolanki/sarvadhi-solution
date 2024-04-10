@@ -14,6 +14,9 @@ const postSchema = new mongoose.Schema({
     caption : {
         type : String
     },
+    hashTags: [{
+        type: String
+    }],
     likesCount : {
         type : Number,
         default : 0

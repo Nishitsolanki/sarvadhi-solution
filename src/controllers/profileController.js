@@ -4,8 +4,6 @@ const bcrypt = require("bcrypt")
 const moment = require("moment")
 const upload = require('../aws/config.js')
 const jwt = require("jsonwebtoken")
-const redis = require("redis")
-const{ promisify } = require("util");
 const {isValid, emptyBody, emailCheck, isValidPassword, idMatch, onlyNumbers, isValidMobileNum, profileImageCheck, userNameCheck, isValidDateFormat} = require("../validations/validator.js")
 
 
@@ -827,6 +825,9 @@ const commentOnPost = async function (req, res){
          commentsList.push(obj)
 
         let finalData = await postModel.findOneAndUpdate({_id: postId}, {commentsCount: commentsCount, commentsList: commentsList}, {new: true})
+
+        io.emit('comment', { postId, comment });
+
         res.status(200).send({status: true, message: "Comment posted successfully!", data: finalData})
 
 
@@ -965,6 +966,8 @@ const likePost = async function (req, res) {
         let likesCount = post.likesCount + 1
 
         var updatedLikeList = await postModel.findOneAndUpdate({ _id: postId }, { likesList: likesList, likesCount: likesCount }, { new: true })
+
+        io.emit('like', { postId, profileId });
         return res.status(200).send({ status: true, message: "You have now liked this post.", data: updatedLikeList })
 
 
