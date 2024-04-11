@@ -4,12 +4,12 @@ const postModel = require("../models/postModel.js")
 
 const getAllUserPosts = async (req, res) => {
     try {
-        const allPosts = await postModel.find()
-        return res.status(200).res.send({status: true, msg:allPosts});
+      const allPosts = await postModel.find();
+      res.status(200).json({ status: true, data: allPosts });
     } catch (error) {
-        return res.status(500).send({status: false, message: error.message})
+      res.status(500).json({ status: false, message: error.message });
     }
-};
+  };
 
 //====================================  admin delete post  ===========================================//
 

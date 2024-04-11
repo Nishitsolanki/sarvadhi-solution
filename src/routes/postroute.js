@@ -22,14 +22,4 @@ router.delete("/post/:profileId/deletePost/:postId", MW.authentication, MW.autho
 
 
 
-
-//====================================  Invalid API  ==========================================//
-router.all("/**", function (req, res) {
-    res.status(404).send({
-        status: false,
-        msg: "The api you requested is not available!"
-    })
-})
-
-
 module.exports = router;

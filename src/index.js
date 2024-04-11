@@ -41,6 +41,10 @@ mongoose.connect(process.env.MONGO_URI, { useNewUrlParser: true, useUnifiedTopol
       console.log('User disconnected');
     });
   });
+  app.use((req, res, next) => {
+    req.io = io;
+    next();
+});
 
 app.use("/", postRoute,profileRoute);
 app.use("/admin",adminRoute)
@@ -48,3 +52,5 @@ app.use("/admin",adminRoute)
 app.listen(process.env.PORT || 3000, function () {
   console.log("Express app running on port " + (process.env.PORT || 3000));
 });
+
+module.exports = app;

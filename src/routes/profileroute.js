@@ -8,7 +8,7 @@ router.post("/profile/register", profileController.createProfile)
 
 router.post("/profile/login", profileController.loginUser)
 
-router.get("/profile/:profileId/getProfile",  profileController.getProfile)
+router.get("/profile/:profileId/getProfile",   MW.authentication, MW.authorization,profileController.getProfile)
 
 router.put("/profile/:profileId/update",  profileController.updateProfile)
 

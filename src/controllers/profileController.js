@@ -4,6 +4,7 @@ const bcrypt = require("bcrypt")
 const moment = require("moment")
 const upload = require('../aws/config.js')
 const jwt = require("jsonwebtoken")
+const io = require('../index.js');
 const {isValid, emptyBody, emailCheck, isValidPassword, idMatch, onlyNumbers, isValidMobileNum, profileImageCheck, userNameCheck, isValidDateFormat} = require("../validations/validator.js")
 
 
@@ -125,20 +126,19 @@ const loginUser = async function (req, res) {
         
         let token = jwt.sign(
             {
+                role: emailInDB.role,
                 profileId: emailInDB._id.toString(),
                 group: "codeZinger",
                 project: "SocialMedia",
                 iat: Math.floor(Date.now() / 1000),
                 exp: Math.floor(Date.now() / 1000) + 480 * 60 * 60
             },
-            process.env.SECRET             
+           process.env.SECRET        
         )
 
         res.status(200).send({status: true, message: "User logged in successfully!", data: {profileId: emailInDB._id, token: token}})
 
     }
-
-
 
     if(mobileNo){
         if(!isValid(mobileNo)) return res.status(400).send({status: false, message: "Mobile number cannot be empty!"})
@@ -300,7 +300,7 @@ const updateProfile = async function (req, res){
     if(password){
         if(!isValidPassword(password)) return res.status(400).send({status: false, message: "Password should have characters between 8 to 15 and should contain alphabets and numbers only!"})
         let salt = await bcrypt.genSalt(10)
-       password = await bcrypt.hash(password, salt)
+        data.password = await bcrypt.hash(password, salt)
     }
 
     if(email){
@@ -826,7 +826,7 @@ const commentOnPost = async function (req, res){
 
         let finalData = await postModel.findOneAndUpdate({_id: postId}, {commentsCount: commentsCount, commentsList: commentsList}, {new: true})
 
-        io.emit('comment', { postId, comment });
+        req.io.emit('comment', { postId, comment });
 
         res.status(200).send({status: true, message: "Comment posted successfully!", data: finalData})
 
@@ -967,7 +967,7 @@ const likePost = async function (req, res) {
 
         var updatedLikeList = await postModel.findOneAndUpdate({ _id: postId }, { likesList: likesList, likesCount: likesCount }, { new: true })
 
-        io.emit('like', { postId, profileId });
+        req.io.emit('like', { postId, profileId });
         return res.status(200).send({ status: true, message: "You have now liked this post.", data: updatedLikeList })
 
 

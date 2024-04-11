@@ -241,7 +241,7 @@ const updatePost = async function (req, res){
         }
 
         if(req.body.location){
-            if(!isValid(location)) return res.status(400).send({status: false, message: "Please provide a valid location."})
+            if(!isValid(req.body.location)) return res.status(400).send({status: false, message: "Please provide a valid location."})
             data.location = data.location.trim().split(" ").filter(word => word).join(" ")
         }
 
