@@ -1,1 +1,4 @@
-made it by 5 hour
+git clone
+cd sarvadhi-solution
+npm i
+npm start
