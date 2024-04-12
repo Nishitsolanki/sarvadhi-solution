@@ -10,7 +10,7 @@ router.post("/profile/login", profileController.loginUser)
 
 router.get("/profile/:profileId/getProfile",   MW.authentication, MW.authorization('user'),profileController.getProfile)
 
-router.put("/profile/:profileId/update", MW.authorization('user'), profileController.updateProfile)
+router.put("/profile/:profileId/update",MW.authentication, MW.authorization('user'), profileController.updateProfile)
 
 router.delete("/profile/:profileId/delete", MW.authentication, MW.authorization('user'), profileController.deleteProfile)
 
