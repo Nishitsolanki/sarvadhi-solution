@@ -9,15 +9,15 @@ const MW = require("../middlewares/auth.js")
 //====================================  Post Handlers  =========================================//
 router.post("/post/create",  postController.createPost)
 
-router.get("/post/:profileId/getPost/:postId", MW.authentication, MW.authorization, postController.getPost)
+router.get("/post/:profileId/getPost/:postId", MW.authentication, MW.authorization('user'), postController.getPost)
 
-router.get("/post/:profileId/getLikesList/:postId", MW.authentication, MW.authorization, postController.getLikesList)
+router.get("/post/:profileId/getLikesList/:postId", MW.authentication, MW.authorization('user'), postController.getLikesList)
 
-router.get("/post/:profileId/getCommentsList/:postId", MW.authentication, MW.authorization, postController.getCommentsList)
+router.get("/post/:profileId/getCommentsList/:postId", MW.authentication, MW.authorization('user'), postController.getCommentsList)
 
-router.put("/post/:profileId/updatePost/:postId", MW.authentication, MW.authorization, postController.updatePost)
+router.put("/post/:profileId/updatePost/:postId", MW.authentication, MW.authorization('user'), postController.updatePost)
 
-router.delete("/post/:profileId/deletePost/:postId", MW.authentication, MW.authorization, postController.deletePost)
+router.delete("/post/:profileId/deletePost/:postId", MW.authentication, MW.authorization('user'), postController.deletePost)
 
 
 

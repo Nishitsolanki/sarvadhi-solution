@@ -8,8 +8,8 @@ const MW = require("../middlewares/auth.js")
 
 //====================================  admin handler Handlers  =========================================//
 
-router.get('/posts',MW.authentication, MW.adminAuthorization, postController.getAllUserPosts );
-router.delete('/posts/:postId',MW.authentication, MW.adminAuthorization, postController. deletePost);
+router.get('/posts',MW.authentication, MW.authorization('admin'), postController.getAllUserPosts );
+router.delete('/posts/:postId',MW.authentication, MW.authorization('admin'), postController. deletePost);
 
 
 module.exports = router;
